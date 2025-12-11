@@ -3,8 +3,8 @@ let token = "";
 
 // LOGIN
 async function login() {
-    const email = email.value;
-    const password = password.value;
+    const email = document.getElementById("loginEmail").value;
+    const password = document.getElementById("loginPassword").value;
 
     const res = await fetch(API + "/login", {
         method: "POST",
@@ -23,6 +23,7 @@ async function login() {
 
     loadUsers();
 }
+
 
 // CARGAR USUARIOS
 async function loadUsers() {
