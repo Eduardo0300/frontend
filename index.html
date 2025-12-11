@@ -1,71 +1,65 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Login simple</title>
-<style>
-body { font-family: Arial; max-width: 400px; margin: 40px auto; }
-input { width: 100%; padding: 10px; margin: 10px 0; }
-button { width: 100%; padding: 10px; }
-#admin { margin-top: 40px; }
-</style>
+    <meta charset="UTF-8">
+    <title>Panel de Usuarios</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<h2>Login</h2>
-<input id="email" placeholder="Email">
-<input id="pass" type="password" placeholder="Contraseña">
-<button onclick="login()">Entrar</button>
+<div class="container">
 
-<div id="admin" style="display:none;">
-    <h3>Usuarios (Admin)</h3>
-    <button onclick="loadUsers()">Recargar</button>
-    <ul id="list"></ul>
+    <!-- LOGIN -->
+    <div class="card" id="loginCard">
+        <h1>Login</h1>
+
+        <input id="email" placeholder="Correo" value="admin@gmail.com">
+        <input id="password" type="password" placeholder="Contraseña" value="1234">
+        <button class="btn" onclick="login()">Entrar</button>
+    </div>
+
+    <!-- PANEL ADMIN -->
+    <div class="card oculto" id="panelCard">
+
+        <h1>Panel de Usuarios</h1>
+        <button class="btn" onclick="loadUsers()">Recargar Usuarios</button>
+
+        <table class="usuariosTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Rol</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="usersTableBody"></tbody>
+        </table>
+
+        <h2>Crear Usuario</h2>
+        <input id="newName" placeholder="Nombre">
+        <input id="newEmail" placeholder="Correo">
+        <input id="newPassword" placeholder="Contraseña">
+        <select id="newRole">
+          <option value="admin">Admin</option>
+          <option value="user">User</option>
+        </select>
+        <button class="btn" onclick="createUser()">Crear</button>
+
+        <h2>Editar Usuario</h2>
+        <input id="editId" placeholder="ID" readonly>
+        <input id="editName" placeholder="Nombre">
+        <select id="editRole">
+          <option value="admin">Admin</option>
+          <option value="user">User</option>
+        </select>
+        <button class="btn" onclick="editUser()">Guardar Cambios</button>
+
+    </div>
+
 </div>
 
-<script>
-const API = "https://backend-registro-mv7j.onrender.com";
-
-let token = null;
-
-// ---------------------
-// LOGIN
-// ---------------------
-async function login() {
-    let res = await fetch(API + "/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            email: email.value,
-            password: pass.value
-        })
-    });
-
-    let data = await res.json();
-
-    if (data.token) {
-        token = data.token;
-        document.getElementById("admin").style.display = "block";
-        alert("Bienvenido " + data.user.full_name);
-    } else {
-        alert("Error en login");
-    }
-}
-
-// ---------------------
-// Cargar usuarios
-// ---------------------
-async function loadUsers() {
-    let res = await fetch(API + "/users", {
-        headers: { "Authorization": "Bearer " + token }
-    });
-
-    let users = await res.json();
-
-    list.innerHTML = users.map(u =>
-        `<li>${u.full_name} — ${u.email} — ${u.role}</li>`
-    ).join("");
-}
-</script>
+<script src="app.js"></script>
 </body>
 </html>
