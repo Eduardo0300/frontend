@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Login simple</title>
+<style>
+body { font-family: Arial; max-width: 400px; margin: 40px auto; }
+input { width: 100%; padding: 10px; margin: 10px 0; }
+button { width: 100%; padding: 10px; }
+#admin { margin-top: 40px; }
+</style>
+</head>
+<body>
+
+<h2>Login</h2>
+<input id="email" placeholder="Email">
+<input id="pass" type="password" placeholder="Contraseña">
+<button onclick="login()">Entrar</button>
+
+<div id="admin" style="display:none;">
+    <h3>Usuarios (Admin)</h3>
+    <button onclick="loadUsers()">Recargar</button>
+    <ul id="list"></ul>
+</div>
+
+<script>
+const API = "https://backend-registro-mv7j.onrender.com";
+
+let token = null;
+
+// ---------------------
+// LOGIN
+// ---------------------
+async function login() {
+    let res = await fetch(API + "/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            email: email.value,
+            password: pass.value
+        })
+    });
+
+    let data = await res.json();
+
+    if (data.token) {
+        token = data.token;
+        document.getElementById("admin").style.display = "block";
+        alert("Bienvenido " + data.user.full_name);
+    } else {
+        alert("Error en login");
+    }
+}
+
+// ---------------------
+// Cargar usuarios
+// ---------------------
+async function loadUsers() {
+    let res = await fetch(API + "/users", {
+        headers: { "Authorization": "Bearer " + token }
+    });
+
+    let users = await res.json();
+
+    list.innerHTML = users.map(u =>
+        `<li>${u.full_name} — ${u.email} — ${u.role}</li>`
+    ).join("");
+}
+</script>
+</body>
+</html>
