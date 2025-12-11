@@ -13,16 +13,19 @@
     <div class="card" id="loginCard">
         <h1>Login</h1>
 
-<input id="loginEmail" placeholder="Correo" value="admin@gmail.com">
-<input id="loginPassword" type="password" placeholder="Contraseña" value="1234">
-<button class="btn" onclick="login()">Entrar</button>
-
+        <input id="loginEmail" placeholder="Correo" value="admin@gmail.com">
+        <input id="loginPassword" type="password" placeholder="Contraseña" value="1234">
+        <button class="btn" onclick="login()">Entrar</button>
     </div>
 
     <!-- PANEL ADMIN -->
     <div class="card oculto" id="panelCard">
 
-        <h1>Panel de Usuarios</h1>
+        <div class="headerRow">
+            <h1>Panel de Usuarios</h1>
+            <button class="logout" onclick="logout()">Cerrar Sesión</button>
+        </div>
+
         <button class="btn" onclick="loadUsers()">Recargar Usuarios</button>
 
         <table class="usuariosTable">
@@ -38,24 +41,39 @@
             <tbody id="usersTableBody"></tbody>
         </table>
 
-        <h2>Crear Usuario</h2>
-        <input id="newName" placeholder="Nombre">
-        <input id="newEmail" placeholder="Correo">
-        <input id="newPassword" placeholder="Contraseña">
-        <select id="newRole">
-          <option value="admin">Admin</option>
-          <option value="user">User</option>
-        </select>
-        <button class="btn" onclick="createUser()">Crear</button>
+        <!-- BOTÓN PARA ABRIR CREACIÓN -->
+        <button class="btnPlus" onclick="toggleCreate()">+ Crear Usuario</button>
 
-        <h2>Editar Usuario</h2>
-        <input id="editId" placeholder="ID" readonly>
-        <input id="editName" placeholder="Nombre">
-        <select id="editRole">
-          <option value="admin">Admin</option>
-          <option value="user">User</option>
-        </select>
-        <button class="btn" onclick="editUser()">Guardar Cambios</button>
+        <!-- FORMULARIO CREAR -->
+        <div id="createCard" class="subCard oculto">
+            <h2>Crear Usuario</h2>
+
+            <input id="newName" placeholder="Nombre">
+            <input id="newEmail" placeholder="Correo">
+            <input id="newPassword" placeholder="Contraseña">
+
+            <select id="newRole">
+                <option value="admin">Admin</option>
+                <option value="user">User</option>
+            </select>
+
+            <button class="btn" onclick="createUser()">Crear</button>
+        </div>
+
+        <!-- FORMULARIO EDITAR -->
+        <div id="editCard" class="subCard oculto">
+            <h2>Editar Usuario</h2>
+
+            <input id="editId" placeholder="ID" readonly>
+            <input id="editName" placeholder="Nombre">
+
+            <select id="editRole">
+                <option value="admin">Admin</option>
+                <option value="user">User</option>
+            </select>
+
+            <button class="btn" onclick="editUser()">Guardar Cambios</button>
+        </div>
 
     </div>
 

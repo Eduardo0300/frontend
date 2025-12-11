@@ -3,8 +3,8 @@ let token = "";
 
 // LOGIN
 async function login() {
-    const email = document.getElementById("loginEmail").value;
-    const password = document.getElementById("loginPassword").value;
+    const email = loginEmail.value;
+    const password = loginPassword.value;
 
     const res = await fetch(API + "/login", {
         method: "POST",
@@ -18,12 +18,20 @@ async function login() {
 
     token = data.token;
 
-    document.getElementById("loginCard").classList.add("oculto");
-    document.getElementById("panelCard").classList.remove("oculto");
+    loginCard.classList.add("oculto");
+    panelCard.classList.remove("oculto");
 
     loadUsers();
 }
 
+// CERRAR SESIÓN
+function logout() {
+    token = "";
+    panelCard.classList.add("oculto");
+    loginCard.classList.remove("oculto");
+
+    loginPassword.value = "";
+}
 
 // CARGAR USUARIOS
 async function loadUsers() {
@@ -32,7 +40,7 @@ async function loadUsers() {
     });
 
     const users = await res.json();
-    const tbody = document.getElementById("usersTableBody");
+    const tbody = usersTableBody;
 
     tbody.innerHTML = "";
 
@@ -52,14 +60,23 @@ async function loadUsers() {
     });
 }
 
-// RELLENAR CAMPOS PARA EDITAR
+// MOSTRAR/OCULTAR CREAR
+function toggleCreate() {
+    createCard.classList.toggle("oculto");
+}
+
+// RELLENAR EDITAR
 function fillEdit(id, name, role) {
+    editCard.classList.remove("oculto"); // mostrar formulario editar
+
     editId.value = id;
     editName.value = name;
     editRole.value = role;
+
+    createCard.classList.add("oculto"); // ocultar crear si está abierto
 }
 
-// CREAR USUARIO
+// CREAR
 async function createUser() {
     const body = {
         email: newEmail.value,
@@ -79,9 +96,10 @@ async function createUser() {
 
     alert("Usuario creado");
     loadUsers();
+    createCard.classList.add("oculto");
 }
 
-// EDITAR USUARIO
+// EDITAR
 async function editUser() {
     const body = {
         full_name: editName.value,
@@ -99,9 +117,10 @@ async function editUser() {
 
     alert("Usuario actualizado");
     loadUsers();
+    editCard.classList.add("oculto");
 }
 
-// ELIMINAR USUARIO
+// ELIMINAR
 async function deleteUser(id) {
     if (!confirm("¿Seguro de eliminar este usuario?")) return;
 
